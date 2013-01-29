@@ -3,7 +3,7 @@
 Plugin Name: Page Skeleton
 Plugin URI: http://keita.flagship.cc/page-skeleton/
 Description: Page Skeleton is a plugin that will recreate static page structures for large sites.
-Version: 1.0
+Version: 1.0.1
 Author: Keitaroh Kobayashi, Flagship LLC
 Author URI: http://keita.flagship.cc/
 License: MIT
@@ -51,7 +51,7 @@ class WPSkeleton {
         $current_path = sanitize_title($slug);
       } else {
         // We have a parent.
-        
+
         if (is_object($parent)) {
 
           if (count($parent->ancestors) > 0) {
@@ -104,7 +104,7 @@ class WPSkeleton {
             $page_data_array['action'] = 'updated';
 
             // Update the page
-            
+
             wp_update_post($new_page);
 
             if (array_key_exists('template', $page_data)) {
@@ -112,7 +112,7 @@ class WPSkeleton {
             }
 
           }
-            
+
         } else {
           $page_data_array['action'] = 'none';
         }
@@ -168,7 +168,7 @@ class WPSkeleton {
         $error = 'file permission';
       } else {
         fwrite($f, $skeleton);
-        fclose($f); 
+        fclose($f);
       }
     }
 
@@ -241,7 +241,8 @@ class WPSkeleton {
 
       $page_array = array(
         'title' => $page->post_title,
-        'status' => $page->post_status
+        'status' => $page->post_status,
+        'menu_order' => $page->menu_order
       );
 
       if ($include_content === true) {
@@ -321,6 +322,12 @@ class WPSkeleton {
       $new_page['post_status'] = $page_data['status'];
     } else {
       $new_page['post_status'] = 'publish';
+    }
+
+    if (array_key_exists('menu_order', $page_data)) {
+      $new_page['menu_order'] = $page_data['menu_order'];
+    } else {
+      $new_page['menu_order'] = 0;
     }
 
     if ($parent !== false) {
