@@ -3,7 +3,7 @@
 Plugin Name: Page Skeleton
 Plugin URI: http://keita.flagship.cc/page-skeleton/
 Description: Page Skeleton is a plugin that will recreate static page structures for large sites.
-Version: 1.0.1
+Version: 1.0.2
 Author: Keitaroh Kobayashi, Flagship LLC
 Author URI: http://keita.flagship.cc/
 License: MIT
@@ -222,7 +222,8 @@ class WPSkeleton {
     $args = array(
       'hierarchical' => 0,
       'child_of' => end($parents),
-      'parent' => end($parents)
+      'parent' => end($parents),
+      'sort_column' => 'menu_order'
     );
     $pages = get_pages($args);
     foreach ($pages as $page) {
@@ -241,9 +242,12 @@ class WPSkeleton {
 
       $page_array = array(
         'title' => $page->post_title,
-        'status' => $page->post_status,
-        'menu_order' => $page->menu_order
+        'status' => $page->post_status
       );
+
+      if ($page->menu_order > 0) {
+        $page_array['menu_order'] = $page->menu_order;
+      }
 
       if ($include_content === true) {
         $page_array['content'] = $page->post_content;
